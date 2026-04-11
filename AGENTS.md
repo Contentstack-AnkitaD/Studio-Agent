@@ -39,8 +39,10 @@ User asks "what is", "how does", "explain", "I'm stuck", "help me understand":
 
 | Topic | Knowledge File |
 |-------|---------------|
-| What is Studio / SDK | `knowledge/studio/sdk-setup.md` |
-| Component types, props | `knowledge/studio/components-registration.md` |
+| What is Studio / Visual Compose / Studio AI / Polaris | `knowledge/studio/product-overview.md` |
+| What can Polaris do / Help / Getting started | `knowledge/studio/product-overview.md` |
+| SDK architecture, Editor, Transforms | `knowledge/studio/sdk-setup.md` |
+| Component types, props, slot compatibility | `knowledge/studio/components-registration.md` |
 | Design tokens, breakpoints | `knowledge/studio/design-tokens-breakpoints-seo.md` |
 | Compositions, pages, sections | `knowledge/studio/sections-pages-urls.md` |
 | Data binding, data sources | `knowledge/studio/binding-system.md` |
@@ -62,6 +64,9 @@ User asks to DO something — build, create, add, modify, set up, register, conf
 | "Bind this to CMS / connect to entry data" | `skills/composition/bind-data.md` |
 | "Show a list of / iterate over / repeat for each" | `skills/composition/setup-repeater.md` |
 | "Make it bigger / change color / mobile styles" | `skills/composition/modify-styles.md` |
+| "Remove / delete this component" | `skills/composition/remove-move-component.md` |
+| "Move / swap / reorder components" | `skills/composition/remove-move-component.md` |
+| "Not working / blank / error / debug" | `skills/composition/troubleshooting.md` |
 
 #### Code Skills (Polaris Agent — edit project files)
 
@@ -69,8 +74,11 @@ User asks to DO something — build, create, add, modify, set up, register, conf
 |-------------|-------|
 | "Set up Studio SDK in my project" | `skills/code/setup-sdk.md` |
 | "Register this component with Studio" | `skills/code/register-component.md` |
+| "Add/change/remove a prop on registered component" | `skills/code/update-registration.md` |
 | "Register my design tokens / theme" | `skills/code/register-design-tokens.md` |
 | "Set up breakpoints / responsive" | `skills/code/register-breakpoints.md` |
+| "Set up live preview / preview API" | `skills/code/setup-live-preview.md` |
+| "Not working / error / debug (code)" | `skills/composition/troubleshooting.md` |
 
 ### Multi-Step Requests
 If user asks something that spans multiple skills, sequence them:
@@ -94,9 +102,10 @@ If unclear, ask:
 
 Reference documentation in `.opencode/knowledge/`:
 
-### Studio SDK
+### Studio
+- `studio/product-overview.md` — What is Composable Studio, Visual Compose vs Studio AI, what Polaris can do, workflows, key concepts
 - `studio/sdk-setup.md` — SDK architecture (studio-registry + studio-internal), Editor, Node, Operations, Transforms, Path, all registry classes
-- `studio/components-registration.md` — All 12 prop types with TypeScript definitions, 23 built-in component schemas, style sections
+- `studio/components-registration.md` — All prop types, 35 registered components (verified from SDK alpha), slot compatibility table, nesting rules
 - `studio/design-tokens-breakpoints-seo.md` — Token types, breakpoint types, design classes, condition types, SEO metadata
 - `studio/sections-pages-urls.md` — Composition types (page/section/linked/standalone), TOON format, VibeContext, URL patterns
 - `studio/binding-system.md` — DATA_SOURCES, BindingMap, all 7 data source types, type compatibility matrix, field paths, include[], repeater adapters, JsonChange operations, execution contract
@@ -122,14 +131,18 @@ Step-by-step procedural workflows in `.opencode/skills/`:
 - `skills/composition/plan-layout.md` — Analyze description → decide components, nesting, layout patterns
 - `skills/composition/build-page.md` — End-to-end page scaffolding from description
 - `skills/composition/add-component.md` — Generate TOON JSON for a component and insert it
+- `skills/composition/remove-move-component.md` — Remove, move, swap, reorder components
 - `skills/composition/bind-data.md` — Bind component props to CMS data sources
 - `skills/composition/setup-repeater.md` — Create repeater iterating over array data
 - `skills/composition/modify-styles.md` — Change styles, responsive overrides, design tokens
+- `skills/composition/troubleshooting.md` — Debug common issues (blank components, empty bindings, broken styles)
 
 ### Code Skills (edit project files)
 - `skills/code/setup-sdk.md` — Install SDK, create config, register components, set env vars
 - `skills/code/register-component.md` — Convert existing React component to Studio component
+- `skills/code/update-registration.md` — Add/change/remove props on already-registered components
 - `skills/code/register-design-tokens.md` — Extract theme/design system → register with SDK
 - `skills/code/register-breakpoints.md` — Configure responsive breakpoints
+- `skills/code/setup-live-preview.md` — Configure Live Preview for real-time draft content
 
 **Read the relevant skill file and follow it step-by-step. Don't guess the process — the skill has the exact steps.**

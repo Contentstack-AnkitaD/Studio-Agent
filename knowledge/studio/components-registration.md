@@ -415,6 +415,44 @@ interface RepeaterBindingValue {
 | `carousel` | Does not exist (commented out in SDK) |
 | `spacer` | Does not exist |
 
+## Slot Compatibility — What Can Go Where
+
+### Components WITH Slots (can contain children)
+
+| Component | Slot(s) | What Typically Goes Inside |
+|-----------|---------|---------------------------|
+| `page` | `children` | Sections only |
+| `section` | `children` | Boxes, containers |
+| `box` | `children` | Any component |
+| `hstack` | `children` | Boxes (one per column, with `flex: 1` style) |
+| `vstack` | `children` | Boxes (one per row) |
+| `repeater` | `children` | ONE template child (rendered per item) |
+| `condition-block` | `children` | Box (always wrap in box) |
+| `fragment` | `ui` | Any component |
+| `card` | `header`, `children`, `footer` | Any component per slot |
+| `link-container` | `children` | Any component (makes them clickable) |
+| `html-element` | `children` | Any component or `plain-text` |
+| `drawer` | `children` | Any component |
+| `hover-card` | `trigger`, `hoverCardContent` | Any component per slot |
+| `popover` | `children` | Any component |
+| `tooltip` | `children` | Any component |
+
+### Leaf Components (NO slots — cannot contain children)
+
+`header`, `text`, `number`, `button`, `link`, `image`, `video`, `embed`, `json-rte`, `plain-text`, `collapsible-text`, `style-sheet`, `alert`, `avatar`, `badge`, `bread-crumb`, `collapsible`, `menubar`, `progress`, `separator`, `skeleton`
+
+### Nesting Rules
+
+| Rule | Why |
+|------|-----|
+| `section` should only be a direct child of `page` | Sections are top-level page dividers |
+| Don't nest `section` inside `section` | Breaks semantic structure |
+| `hstack`/`vstack` children should be `box` components | Each column/row needs its own container for styling |
+| `repeater` inside `repeater` needs a `box` wrapper | With `metadata.repeaterWrapper: true` |
+| Modular block `repeater` needs `condition-block` children | One per block type — see `constraints.md` |
+| `condition-block` children should be wrapped in `box` | Auto-behavior the agent must replicate |
+| Content goes inside `box`, not directly in `section` | Box provides layout control (max-width, padding, flex) |
+
 ## Style Sections
 
 Style sections control which CSS properties appear in the style panel:
