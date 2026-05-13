@@ -150,7 +150,7 @@ export const designTokens = {
 ```typescript
 // src/studio/design-tokens.ts
 
-import type { DesignTokensInput } from "@contentstack/composable-studio-sdk";
+import type { DesignTokensInput } from "@contentstack/studio-react";
 
 export const designTokens: DesignTokensInput = {
   colors: {
@@ -202,23 +202,24 @@ export const designTokens: DesignTokensInput = {
 };
 ```
 
-## Step 4: Register in SDK Config
+## Step 4: Register via the helper function
 
-Add to the Studio config file (from `setup-sdk` skill):
+Call `registerDesignTokens(...)` at module load — there is no `ComposableStudioSDK` class to construct. The tokens become available to the renderer once registered.
 
 ```typescript
-// src/studio/config.ts
-import { designTokens } from "./design-tokens";
+// src/studio/design-tokens.ts
+import { registerDesignTokens, type DesignTokensInput } from "@contentstack/studio-react";
 
-export function initStudio() {
-  const sdk = new ComposableStudioSDK({
-    components: registeredComponents,
-    designTokens: designTokens,          // ← Add this
-    // ...
-  });
-  sdk.init();
-}
+export const designTokens: DesignTokensInput = {
+  colors:     { /* ... */ },
+  spacing:    { /* ... */ },
+  typography: { /* ... */ },
+};
+
+registerDesignTokens(designTokens);
 ```
+
+Then `import "./design-tokens"` from `src/studio/index.ts` so the registration runs before `studioSdk.init({ stackSdk })`. See the `setup-sdk` skill for the wiring sequence.
 
 ## Step 5: Verify
 

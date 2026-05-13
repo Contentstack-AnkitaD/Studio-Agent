@@ -85,17 +85,20 @@ export const breakpoints = [
 ];
 ```
 
-Add to SDK config:
-```typescript
-// src/studio/config.ts
-import { breakpoints } from "./breakpoints";
+Register them via the helper function — call this at module load before any composition renders:
 
-const sdk = new ComposableStudioSDK({
-  components: registeredComponents,
-  designTokens: designTokens,
-  breakpoints: breakpoints,     // ← Add this
-});
+```typescript
+// src/studio/breakpoints.ts
+import { registerBreakpoints } from "@contentstack/studio-react";
+
+registerBreakpoints([
+  { id: "desktop", title: "Desktop", minWidth: 1024, default: true, icon: "desktop" },
+  { id: "tablet",  title: "Tablet",  minWidth: 768, maxWidth: 1023, icon: "tablet"  },
+  { id: "mobile",  title: "Mobile",  maxWidth: 767, icon: "mobile" },
+]);
 ```
+
+Then `import "./breakpoints"` from `src/studio/index.ts` so the registration runs before `studioSdk.init({ stackSdk })`.
 
 ## Rules
 

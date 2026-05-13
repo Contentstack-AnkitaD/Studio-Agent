@@ -123,13 +123,13 @@ type DesignClassesNames<T> = {
 
 ### Registration Example
 
-```typescript
-import { DesignRegistry } from "@contentstack/composable-studio-sdk";
+Use the helper functions exported from `@contentstack/studio-react`. The `DesignRegistry` class is internal and should not be imported.
 
-const designRegistry = new DesignRegistry();
+```typescript
+import { registerDesignTokens, registerDesignClasses } from "@contentstack/studio-react";
 
 // Register tokens
-designRegistry.registerDesignTokens({
+registerDesignTokens({
   colors: {
     primary: { value: "#0066CC", title: "Primary" },
     secondary: { value: "#FF6600", title: "Secondary" },
@@ -161,7 +161,7 @@ designRegistry.registerDesignTokens({
 }, { allowedDesignValues: "all" });
 
 // Register classes
-const classNames = designRegistry.registerClasses({
+const classNames = registerDesignClasses({
   "card-shadow": {
     title: "Card Shadow",
     values: [
@@ -226,12 +226,12 @@ interface DefaultBreakpoint extends Breakpoint {
 
 ### Registration Example
 
+Use the helper function — the `BreakpointRegistry` class is internal.
+
 ```typescript
-import { BreakpointRegistry } from "@contentstack/composable-studio-sdk";
+import { registerBreakpoints } from "@contentstack/studio-react";
 
-const breakpointRegistry = new BreakpointRegistry();
-
-breakpointRegistry.registerBreakpoints([
+registerBreakpoints([
   {
     id: "desktop",
     title: "Desktop",

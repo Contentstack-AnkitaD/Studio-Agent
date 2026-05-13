@@ -114,7 +114,7 @@ If found, add to it. If not, create one:
 
 ```typescript
 // src/studio/components.ts
-import { registerComponents } from "@contentstack/composable-studio-sdk";
+import { registerComponents } from "@contentstack/studio-react";
 ```
 
 ## Step 4: Write the Registration

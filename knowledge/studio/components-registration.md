@@ -2,23 +2,36 @@
 
 ## Registration API
 
+Use the **helper functions** exported from `@contentstack/studio-react`. Do NOT import the `ComponentRegistry` class directly — that's an internal abstraction (documented in `sdk-setup.md` for reference only).
+
 ```typescript
-import { ComponentRegistry } from "@contentstack/composable-studio-sdk";
+import { registerComponent, registerComponents, registerLazyComponent } from "@contentstack/studio-react";
+import HeroBanner from "./HeroBanner";
 
-const registry = new ComponentRegistry();
+// Option 1 — one at a time
+registerComponent("hero-banner", HeroBanner);
 
-registry.registerComponents([
-  {
-    type: "hero-banner",        // Unique ID — used in composition JSON
-    component: HeroBanner,      // React component
-    title: "Hero Banner",       // Display name
-    description: "Full-width hero section with heading, image, CTA",
-    category: "content",        // Grouping in component panel
-    icon: "hero",               // Icon name
-    props: { /* see below */ },
-    styles: { /* see below */ },
-  },
-]);
+// Option 2 — bulk (map of uid → component)
+registerComponents({
+  "hero-banner": HeroBanner,
+  // ...
+});
+
+// Option 3 — lazy (code-split)
+registerLazyComponent("heavy", () => import("./Heavy"));
+```
+
+Some component registrations need richer metadata (title, props schema, styles, category, icon) for the Visual Builder panel. Pass an options object as the second argument:
+
+```typescript
+registerComponent("hero-banner", HeroBanner, {
+  title: "Hero Banner",                    // Display name in panel
+  description: "Full-width hero section",  // Description for AI / docs
+  category: "content",                     // Grouping in component panel
+  icon: "hero",                            // Icon name
+  props: { /* see below */ },
+  styles: { /* see below */ },
+});
 ```
 
 ## Prop Type Definitions (from SDK source)

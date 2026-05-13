@@ -2,27 +2,46 @@
 
 ## What is Composable Studio SDK?
 
-The SDK (`@contentstack/composable-studio-sdk`) connects any web app to Contentstack's visual editor (Studio). It's a monorepo with two core packages:
-
-- **`studio-registry`** — Component, design token, breakpoint, and data binder registries
-- **`studio-internal`** — Editor core: Node interface, Path interface, Operations, Transforms
+The user-facing npm package is **`@contentstack/studio-react`**. It re-exports the studio core, the React renderer, and a set of helper functions that wrap the internal registries.
 
 ```
 ┌─────────────────────┐     postMessage      ┌──────────────────────┐
 │   Studio Editor     │ ◄──────────────────► │  SDK (iframe)         │
 │   (Parent Window)   │                      │  User's Web App       │
-│                     │  composition JSON    │  + studio-registry    │
-│                     │  operations          │  + studio-internal    │
+│                     │  composition JSON    │  + @contentstack/     │
+│                     │  operations          │     studio-react      │
 └─────────────────────┘                      └──────────────────────┘
 ```
 
-## Package: `studio-registry`
+## Public SDK API (what agents should use)
 
-Located at: `packages/studio-registry/src/`
+These are the only symbols an agent should import directly from `@contentstack/studio-react`. The classes documented further below (`ComponentRegistry`, `DesignRegistry`, `BreakpointRegistry`) are **internal abstractions** — they back the helper functions but are not exposed for direct instantiation.
 
-### ComponentRegistry
+| Helper function | Internal registry it wraps | Purpose |
+|---|---|---|
+| `studioSdk.init({ stackSdk })` | core init | One-time SDK bootstrap; returns `studioClient` (used for SSR fetch) |
+| `registerComponent(uid, Component)` / `registerComponents(map)` / `registerLazyComponent(uid, () => import(...))` | `ComponentRegistry` | Register React components against composition UIDs |
+| `registerDesignTokens(tokens)` / `registerDesignClasses(classes)` / `getDesignTokens()` | `DesignRegistry` | Register design tokens / utility classes |
+| `registerBreakpoints(map)` | `BreakpointRegistry` | Register responsive breakpoints |
+| `registerJSONRTE(...)` | RTE config | Configure custom rich-text behavior |
+| `useCompositionData({ compositionUid })` / `useMultipleCompositions(...)` | renderer hooks | CSR-side composition fetching |
+| `<StudioComponent specOptions={...}/>` / `<StudioCanvas>` / `<PreviewRenderer>` | renderer | Render the resolved spec |
+| `extractStyles(spec)` | renderer | Pull inline CSS for SSR |
+| `clientRendererModeUtil` | runtime util | `.isInsideStudioFrame()` etc. |
 
-Class that manages component registration. Key methods:
+Setup procedures live in [`skills/code/setup-sdk.md`](../../skills/code/setup-sdk.md) (CSR) and [`skills/code/setup-ssr.md`](../../skills/code/setup-ssr.md) (SSR).
+
+## Internal architecture — for reference / debugging only
+
+The rest of this file documents the *internal* class APIs. **Agents should not import these classes** — call the helper functions above instead. This section is here so you can debug type errors or read library source intelligently when a helper signature isn't enough.
+
+### Internal package: `studio-registry`
+
+Located in the SDK monorepo at `packages/studio-registry/src/`.
+
+#### ComponentRegistry (internal)
+
+Internal class that backs `registerComponent` / `registerComponents`. Do not import directly. Key methods:
 
 ```typescript
 class ComponentRegistry {
@@ -92,7 +111,9 @@ interface StyleSectionOptions {
 }
 ```
 
-### DesignRegistry
+#### DesignRegistry (internal)
+
+Internal class backing `registerDesignTokens` / `registerDesignClasses` / `getDesignTokens`. Do not import directly.
 
 ```typescript
 class DesignRegistry {
@@ -116,7 +137,9 @@ class DesignRegistry {
 }
 ```
 
-### BreakpointRegistry
+#### BreakpointRegistry (internal)
+
+Internal class backing `registerBreakpoints`. Do not import directly.
 
 ```typescript
 class BreakpointRegistry {

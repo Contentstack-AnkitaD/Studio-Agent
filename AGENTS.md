@@ -80,6 +80,30 @@ User asks to DO something — build, create, add, modify, set up, register, conf
 | "Set up live preview / preview API" | `skills/code/setup-live-preview.md` |
 | "Not working / error / debug (code)" | `skills/composition/troubleshooting.md` |
 
+#### CMS Skills (Polaris Agent — wire Contentstack Delivery / content modeling)
+
+| User Intent | Skill |
+|-------------|-------|
+| "Set up Contentstack" / "install delivery SDK" / "wire up CMS" | `skills/cms/setup-cms.md` |
+| "Where do I find my api key / delivery token" / "I don't have tokens" | `skills/cms/find-cms-tokens.md` |
+| "Create content types from my hardcoded data" / "scaffold content types" | `skills/cms/scaffold-content-types.md` |
+| "Seed entries from my mock data" / "import my data into Contentstack" | `skills/cms/seed-entries.md` |
+| "Replace hardcoded data with CMS fetches" / "rewire components to CMS" | `skills/cms/rewire-to-cms.md` |
+
+Sequencing for the full "make my static page CMS-driven" flow:
+`find-cms-tokens` (if needed) → `setup-cms` → `scaffold-content-types` → `seed-entries` → `rewire-to-cms` → `setup-live-preview` (optional).
+
+#### Contentstack Detection Skills (read-only — inspect what's already wired)
+
+| User Intent | Skill |
+|-------------|-------|
+| "Is Contentstack CMS set up here?" / "Detect CMS Delivery SDK" | `skills/contentstack-detection/cms-check/SKILL.md` |
+| "Is Live Preview wired in this project?" / "Check Live Preview setup" | `skills/contentstack-detection/live-preview-check/SKILL.md` |
+| "Is Studio SDK installed?" / "Check Studio integration" | `skills/contentstack-detection/studio-check/SKILL.md` |
+| "Scan this project for Contentstack — what's configured?" | run all three above in order: `cms-check` → `live-preview-check` → `studio-check` |
+
+These skills are pure detection (read-only). They emit a structured `<skill-result name="…">{...}</skill-result>` JSON block per skill — used by the backend orchestrator and by the FE "Connect Contentstack" modal. Each skill describes its own 3-step pipeline (installed → initialized → wired).
+
 ### Multi-Step Requests
 If user asks something that spans multiple skills, sequence them:
 
@@ -144,5 +168,21 @@ Step-by-step procedural workflows in `.opencode/skills/`:
 - `skills/code/register-design-tokens.md` — Extract theme/design system → register with SDK
 - `skills/code/register-breakpoints.md` — Configure responsive breakpoints
 - `skills/code/setup-live-preview.md` — Configure Live Preview for real-time draft content
+
+### CMS Skills (wire Contentstack Delivery / content modeling)
+- `skills/cms/setup-cms.md` — Install Delivery SDK, create singleton client, write env vars, verify via live CDN fetch
+- `skills/cms/find-cms-tokens.md` — Guide user to api_key / delivery_token / environment / region in the Contentstack UI; validate format and hand off to setup-cms
+- `skills/cms/scaffold-content-types.md` — Read hardcoded data in the project, infer field shapes, create matching content types via CMA
+- `skills/cms/seed-entries.md` — Import hardcoded values as entries via CMA, publish to the configured environment
+- `skills/cms/rewire-to-cms.md` — Replace hardcoded imports in components with Delivery SDK fetches (framework-aware pattern per Next/Vite/Remix)
+
+### Contentstack Detection Skills (read-only)
+Pure-detection skills that inspect what's already wired in the project. Each emits a structured `<skill-result name="…">{...}</skill-result>` JSON block when invoked.
+
+- `skills/contentstack-detection/README.md` — Overview + skill registry + orchestrator invocation contract
+- `skills/contentstack-detection/cms-check/SKILL.md` — Detect Contentstack Delivery SDK install/init/wired
+- `skills/contentstack-detection/live-preview-check/SKILL.md` — Detect Live Preview install/init/wired (onEntryChange + live_preview config)
+- `skills/contentstack-detection/studio-check/SKILL.md` — Detect Studio SDK install/init/wired (CSR vs SSR)
+- `skills/contentstack-detection/_shared/known-packages.json` — Pinned npm package names per product (single source of truth)
 
 **Read the relevant skill file and follow it step-by-step. Don't guess the process — the skill has the exact steps.**
